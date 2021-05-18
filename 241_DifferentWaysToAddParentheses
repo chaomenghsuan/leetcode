@@ -1,0 +1,20 @@
+class Solution:
+    def diffWaysToCompute(self, expression: str) -> List[int]:
+        memo = {}
+        def cal(s:str) -> List[int]:
+            if s.isdigit():
+                return [int(s)]
+            if s in memo.keys():
+                return memo[s]
+            
+            res = []
+            for i in range(len(s)):
+                if s[i] in '+-*':
+                    left = cal(s[:i])
+                    right = cal(s[i+1:])
+                    for x in left:
+                        for y in right:
+                            res.append(eval(str(x)+s[i]+str(y)))
+            memo.update({s:res})
+            return res
+        return cal(expression)
